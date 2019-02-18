@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\DocumentationHelperController;
+
+class DocumentationController extends DocumentationHelperController
+{
+
+    public function generate_docs_js_file() {
+        $this->generate_js_file();
+    }
+
+    public function index() {
+        $app = app();
+        $routes = $app->routes->getRoutes();
+
+        $all_routes = [];
+        foreach ($routes as &$route) {
+            $method = $route->methods[0];
+            $url = '/' . $route->uri;
+
+            $action_array = $route->getActionName();
+            $action_path = is_array($action_array) && sizeof($action_array) > 1 ? $action_array[1] : is_string($action_array) ? $action_array : null;
+
+            $action = $this->get_verb($action_path);
+
+            $color = $this->get_color_for_method($method);
+
+            $params = array_map(function($val) {
+                return preg_replace('/({)|(})/', '', $val);
+            }, array_filter(explode('/', $url), function($pather) {
+                return sizeof(explode('{', $pather)) > 1;
+            }));
+
+            $middleware = ['Not Available'];
+            $routeHeader = "text-white bg-" . $color;
+            $submitButtonColor = "btn btn-outline-" . $color;
+            $temp_route = implode('', array_map(function($value) {
+                $is_param = sizeof(explode('{', $value)) > 1;
+                return $is_param ? ucfirst(preg_replace('/({)|(})/', '', $value) . 'Param') : ucfirst($value);
+            }, explode('/', $url)));
+            $camelCased = strtolower($method) . $temp_route;
+            $allowParams = sizeof(explode('{', $url)) > 1;
+            $allowBody =  $method == 'GET' ? false : $method != 'DELETE';
+            $description = [''];
+
+            array_push($all_routes, [
+                'method' => $method,
+                'route' => $url,
+                'verb' => $action,
+                'params' => $params,
+                'middleware' => $middleware,
+                'routeHeader' => $routeHeader,
+                'submitButtonColor' => $submitButtonColor,
+                'camelCased' => $camelCased,
+                'allowParams' => $allowParams,
+                'allowBody' => $allowBody,
+                'description' => $description,
+            ]);
+        }
+
+        return view('documentation')->with('all_routes', $all_routes);
+    }
+
+    private function get_verb($action_str) {
+        $action_array = explode('@', $action_str);
+        return sizeof($action_array) > 1 ? $action_array[1] : $action_array[0];
+    }
+
+    private function get_color_for_method($method) {
+        $lookup = [
+            'GET' => 'success',
+            'POST' => 'info',
+            'PUT' => 'warning',
+            'PATCH' => 'warning',
+            'DELETE' => 'danger',
+        ];
+
+        return !is_null($lookup[$method]) ? $lookup[$method] : 'light';
+    }
+
+}

@@ -1,0 +1,184 @@
+<?php
+
+namespace App\Http\Controllers;
+
+class DocumentationHelperController extends Controller
+{
+
+    private function get_route_array() {
+        $app = app();
+        $routes = $app->routes->getRoutes();
+        $all_routes = [];
+
+        foreach ($routes as &$route) {
+            $method = $route->methods[0];
+            $url = '/' . $route->uri;
+
+            $temp_route = implode('', array_map(function($value) {
+                $is_param = sizeof(explode('{', $value)) > 1;
+                return $is_param ? ucfirst(preg_replace('/({)|(})/', '', $value) . 'Param') : ucfirst($value);
+            }, explode('/', $url)));
+            $camelCased = strtolower($method) . $temp_route;
+
+            array_push($all_routes, [
+                'method' => $method,
+                'route' => $url,
+                'camelCased' => $camelCased,
+            ]);
+        }
+
+        return $all_routes;
+    }
+
+    public function generate_js_file() {
+        $all_route = $this->get_route_array();
+        $public_path = __DIR__ . '/../../../public/js/docs.js';
+
+        $file_str = '';
+        foreach($all_route as &$route) {
+            $file_str = $this->get_js_string($file_str, $route);
+        }
+
+        file_put_contents($public_path, $file_str);
+    }
+
+    private function get_js_string($javascriptString, $route) {
+
+    $camelCased = $route['camelCased'];
+
+    $javascriptString .= "window.{$camelCased} = function() {
+        var allData = {
+          method: '{$route['method']}',
+          route: '{$route['route']}',
+        };
+        var paramList = document.getElementById('{$camelCased}ParamsForm') && document.getElementById('{$camelCased}ParamsForm').elements ? document.getElementById('{$camelCased}ParamsForm').elements : [];
+
+        var csrfHeader = { headers: { 'X-XSRF-TOKEN': null } };
+        var jsonWebToken = document.getElementById('{$camelCased}AuthorizationToken');
+        if (jsonWebToken && jsonWebToken.value) csrfHeader.headers['Authorization'] = jsonWebToken.value;
+
+        var paramObject = {};
+        var tempParamKey = null;
+        for (var i = 0; i < paramList.length; i++) {
+        var eleParam = paramList[i].value;
+          if (i % 2 !== 0) {
+            paramObject['{' + tempParamKey + '}'] = eleParam;
+            tempParamKey = null;
+          } else {
+            tempParamKey = eleParam;
+          }
+        }
+
+        var routeName = allData.route.split('/').map(e => paramObject[e] ? paramObject[e] : e).join('/');
+
+        if (allData.method !== 'GET' || allData.method !== 'DELETE') {
+        var bodyDataType = document.getElementById('{$camelCased}DataType') && document.getElementById('{$camelCased}DataType').value ? document.getElementById('{$camelCased}DataType').value : false;
+        var formBoolean = bodyDataType === 'Form Data';
+
+        var bodyElements = [];
+        var bodyRawElements = document.getElementById('{$camelCased}BodyForm') && document.getElementById('{$camelCased}BodyForm').elements ? document.getElementById('{$camelCased}BodyForm').elements : [];
+        for (var i = 0; i < bodyRawElements.length; i++) {
+          var eleParam = bodyRawElements[i].files ? bodyRawElements[i].files[0] : (bodyRawElements[i].value || null);
+          bodyElements.push(eleParam);
+        }
+
+        bodyElements = bodyElements.filter(e => !!e);
+
+        var bodyObject = bodyDataType === 'Form Data' ? new FormData() : {};
+        var tempBodyKey = null;
+        bodyElements.forEach((e, i) => {
+            if (i % 2 !== 0) {
+              if (formBoolean) {
+                bodyObject.append(tempBodyKey, e);
+                tempBodyKey = null;
+              } else {
+                bodyObject[tempBodyKey] = e;
+                tempBodyKey = null;
+              }
+            } else {
+              if (formBoolean) {
+                tempBodyKey = e;
+              } else {
+                bodyObject[e] = null;
+                tempBodyKey = e;
+              }
+            }
+          });
+        }
+
+        var qsElements = [];
+        var qsRawElements = document.getElementById('{$camelCased}QSForm') && document.getElementById('{$camelCased}QSForm').elements ? document.getElementById('{$camelCased}QSForm').elements : [];
+        for (var i = 0; i < qsRawElements.length; i++) {
+          var eleParam = qsRawElements[i].value || null;
+          qsElements.push(eleParam);
+        }
+
+        qsElements = qsElements.filter(e => !!e);
+
+        var qsObject = {};
+        var tempQSKey = null;
+        qsElements.forEach((e, i) => {
+          if (i % 2 !== 0) {
+            qsObject[tempQSKey] = e;
+            tempQSKey = null;
+          } else {
+            qsObject[e] = null;
+            tempQSKey = e;
+          }
+        });
+
+        var qsLength = Object.keys(qsObject).length;
+        var querystring = qsLength > 0 ? '?' : '';
+        var qsCount = 0;
+        if (querystring === '?') {
+          for (var qs in qsObject) {
+            if (qsLength - 1 === qsCount) {
+              querystring += qs + '=' + qsObject[qs];
+            } else {
+              querystring += qs + '=' + qsObject[qs] + '&';
+            }
+          }
+        }
+
+        var args = allData.method === 'GET' || allData.method === 'DELETE' ? [routeName + querystring, csrfHeader] : [routeName + querystring, bodyObject, csrfHeader];
+        var resultElement = document.getElementById('{$camelCased}-results');
+
+        axios[allData.method.toLowerCase()](...args)
+          .then((resp) => {
+            if (resp.status <= 300) {
+              resultElement.innerText = JSON.stringify(resp.data, null, 4);
+            } else {
+              resultElement.innerText = JSON.stringify(resp.data, null, 4);
+            }
+          })
+          .catch((err) => {
+            var error_ajax = err && err.response && err.response.data ? err.response.data : err;
+            resultElement.innerText = JSON.stringify(error_ajax, null, 4);
+          });
+        };
+        ";
+
+          $javascriptString .= "window.{$camelCased}NewBody = function() {
+          var ele = document.getElementById('{$camelCased}BodyForm');
+          ele.innerHTML += '<div class=\"d-flex f-row\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter key\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter value\"></div>';
+        };
+
+        ";
+
+          $javascriptString .= "window.{$camelCased}NewBodyFile = function() {
+          var ele = document.getElementById('{$camelCased}BodyForm');
+          ele.innerHTML += '<div class=\"d-flex f-row\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter key\"><input class=\"w-100 m-1 form-control\" type=\"file\" multiple accept=\"*/*\" placeholder=\"Enter value\"></div>';
+        };
+
+        ";
+
+          $javascriptString .= "window.{$camelCased}NewQS = function() {
+          var ele = document.getElementById('{$camelCased}QSForm');
+          ele.innerHTML += '<div class=\"d-flex f-row\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter key\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter value\"></div>';
+        };
+        ";
+
+        return $javascriptString;
+    }
+
+}

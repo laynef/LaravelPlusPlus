@@ -1,0 +1,181 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+trait ClassDetector
+{
+    public function getClassName()
+    {
+        return __CLASS__;
+    }
+}
+
+
+class GlobalController extends Controller
+{
+
+    private function model() {
+        $model_name = preg_replace('/Controller/', '', preg_replace('/App\\\\Http\\\\Controllers\\\\/', 'App\\', $this->getClassName()));
+        return new $model_name();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $class = $this->model();
+        $index = $this->handle_index($class, $request);
+        return response()->json($index, 200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $class = $this->model();
+        $store = $class->create($request->all());
+        return response()->json($store, 201);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $class = $this->model();
+        $show = $class->find($id);
+        return response()->json($show, 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $class = $this->model();
+        $update = $class->findOrFail($id);
+        $update->update($request->all());
+        return response()->json($update, 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $class = $this->model();
+        $destroy = $class->findOrFail($id);
+        $destroy->delete();
+        return response()->json(null, 204);
+    }
+
+    private function handle_index($model_class, $request) {
+        $qs = $this->handle_pagination($request);
+        $data = $model_class;
+        $count = $model_class;
+
+        if ($request->has('include')) {
+            $array = $this->handle_include($request);
+            foreach($array as &$association) {
+                $data = $data->with($association);
+            }
+        }
+
+        if ($request->has('where')) {
+            $array = $this->handle_where($request);
+            $data = $data->where($array);
+            $count = $count->where($array);
+        } else {
+            $count = $count->all();
+        }
+
+        if ($request->has('order')) {
+            // $data = $data->orderBy('id', 'DESC');
+            $order_array = $this->handle_order($request);
+            $data = $data->orderBy(...$order_array);
+        }
+
+        $data = $data->skip($qs["offset"])->take($qs["limit"]);
+
+        $data = $data->get();
+        $count = $count->count();
+
+        return [
+            'data' => $data,
+            'count' => $count,
+        ];
+    }
+
+    private function handle_pagination($request) {
+        $qs_object = $request->query();
+
+        $limit = $request->has('limit') ? (int)$qs_object["limit"] : 25;
+        $offset = $request->has('offset')  ? (int)$qs_object["offset"] * $limit : 0;
+
+        return [
+            'offset' => $offset,
+            'limit' => $limit,
+        ];
+    }
+
+    private function handle_include($request) {
+        $qs_object = $request->query();
+        $include = $qs_object["include"];
+        $include_array = explode(',', $include);
+        return array_map('str_plural', array_map('ucfirst', $include_array));
+    }
+
+    private function reduce($array, $separator) {
+        $acc = [];
+        foreach($array as &$qs) {
+            $array = explode($separator, $qs);
+            $key = $array[0];
+            $value = $array[1];
+            $acc[$key] = $value;
+        }
+        return $acc;
+    }
+
+    private function array_flatmap() {
+        $args = func_get_args();
+        $mapped = array_map(function ($a) {
+            return (array)$a;
+        }, call_user_func_array('array_map', $args));
+
+        return count($mapped) === 0 ? array() : call_user_func_array('array_merge', $mapped);
+    }
+
+    private function handle_where($request) {
+        $qs_object = $request->query();
+        $where = $qs_object["where"];
+        $where_array = explode(',', $where);
+        return $this->reduce($where_array, ':');
+    }
+
+    private function handle_order($request) {
+        $qs_object = $request->query();
+        $order = $qs_object["order"];
+        return $this->array_flatmap(function($string) {
+            return explode(' ', $string);
+        }, explode(',', $order));
+    }
+
+}
