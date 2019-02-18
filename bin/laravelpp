@@ -2,3 +2,6 @@
 
 <?php
 
+require __DIR__ . '/../lib/laravelpp.php';
+$laravelpp = new LaravelPlusPlus();
+$laravelpp->run_command($argv);
