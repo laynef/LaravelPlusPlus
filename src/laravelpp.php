@@ -8,8 +8,8 @@ class LaravelPlusPlus
         })) > 0;
         $command_name = $arguments[1];
         $directory_path = $is_help ? 'help' : 'commands';
-        $file_path = getcwd() . "/lib/{$directory_path}/{$command_name}.php";
-        $bash_path = getcwd() . "/lib/bash/run.sh";
+        $file_path = getcwd() . "/src/{$directory_path}/{$command_name}.php";
+        $bash_path = getcwd() . "/src/bash/run.sh";
 
         if (file_exists($file_path)) {
             $str_args = implode(' ', $arguments);
