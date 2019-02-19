@@ -15,7 +15,7 @@ class LaravelPlusPlus
             $str_args = implode(' ', $arguments);
             shell_exec("{$bash_path} {$file_path} {$str_args}");
         } else {
-            $document_help = getcwd() . '/lib/bash/help/documentation.sh';
+            $document_help = getcwd() . '/src/bash/help/documentation.sh';
             shell_exec("{$bash_path} {$document_help}");
         }
     }
