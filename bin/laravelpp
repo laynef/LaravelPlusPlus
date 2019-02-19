@@ -2,6 +2,6 @@
 
 <?php
 
-require getcwd() . '/lib/laravelpp.php';
+require 'laravelpp/laravelpp';
 $laravelpp = new LaravelPlusPlus();
 $laravelpp->run_command($argv);
