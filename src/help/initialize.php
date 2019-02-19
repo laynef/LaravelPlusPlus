@@ -3,7 +3,7 @@
 class InitializeHelpCommand 
 {
 
-    public function run() {
+    public function run($argv_arguments) {
 echo "
 No Options available. 
 

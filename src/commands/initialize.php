@@ -3,7 +3,7 @@
 class InitializeCommand 
 {
 
-    public function run() {
+    public function run($argv_arguments) {
         $global_controller_str = file_get_contents(__DIR__ . '/templates/global_controller.txt');
         $documentation_blade_str = file_get_contents(__DIR__ . '/templates/documentation.blade.txt');
         $documentation_controller_str = file_get_contents(__DIR__ . '/templates/documentation_controller.txt');

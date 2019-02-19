@@ -3,7 +3,7 @@
 class ModelHelpCommand 
 {
 
-    public function run() {
+    public function run($argv_arguments) {
 echo "
 Same command as 'php artisan make:model <model-name>' 
 with the options '--migration --controller --resource --api' given

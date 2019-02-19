@@ -3,7 +3,7 @@
 class DocumentationHelpCommand 
 {
 
-    public function run() {
+    public function run($argv_arguments) {
 echo "
     Hello
 ";
