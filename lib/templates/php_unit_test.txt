@@ -1,0 +1,133 @@
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
+{
+
+    public $created_id = null;
+    public $api_route = '{{ RESOURCE_ROUTE }}';
+    public $headers = [
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json',
+    ];
+
+    private function get_response($method, $url, $body = false) {
+        if ($body == false) {
+            return $this->withHeaders($this->headers)->json($method, $url);
+        } else {
+            return $this->withHeaders($this->headers)->json($method, $url, $body);
+        }
+    }
+
+    /**
+     * Test index for a resource method.
+     *
+     * @return void
+     */
+    public function testIndex()
+    {
+        $response = $this->get_response("GET", "/api/{$this->api_route}");
+        $response->assertStatus(200);
+    }
+
+    public function testIndexInclude()
+    {
+        $include_options = false;
+        if ($include_options) {
+            $this->get_response("GET", "/api/{$this->api_route}?include={$include_options}")->assertStatus(200);
+        } else {
+            $this->assertTrue(true);
+        }
+    }
+
+    public function testIndexWhere()
+    {
+        $where_options = "id:2";
+        $this->get_response("GET", "/api/{$this->api_route}?where={$where_options}")->assertStatus(200);
+    }
+
+    public function testIndexOrder()
+    {
+        $order_options = "id DESC";
+        $this->get_response("GET", "/api/{$this->api_route}?order={$order_options}")->assertStatus(200);
+    }
+
+    public function testIndexLimit()
+    {
+        $limit_options = "1";
+        $this->get_response("GET", "/api/{$this->api_route}?limit={$limit_options}")->assertStatus(200);
+    }
+
+    public function testIndexOffset()
+    {
+        $offset_options = "1";
+        $this->get_response("GET", "/api/{$this->api_route}?offset={$offset_options}")->assertStatus(200);
+    }
+
+        /**
+     * Test show for a resource method.
+     *
+     * @return void
+     */
+    public function testShow()
+    {
+        $response = $this->get_response("GET", "/api/{$this->api_route}/1");
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Test store for a resource method.
+     *
+     * @return void
+     */
+    public function testStore()
+    {
+        $response = $this->get_response("POST", "/api/{$this->api_route}", [
+            "title" => "Test",
+            "text" => "Automatic",
+            "user_id" => 1
+        ]);
+
+        $json = json_decode($response->getContent(), true);
+
+        if (array_key_exists('id', $json)) {
+            $this->created_id = $json['id'];
+        }
+        $response->assertStatus(201);
+    }
+
+    /**
+     * Test update for a resource method.
+     *
+     * @return void
+     */
+    public function testUpdate()
+    {
+        if (is_null($this->created_id) == false) {
+            $response = $this->get_response("PUT", "/api/{$this->api_route}/{$this->created_id}", []);
+            $response->assertStatus(200);
+        } else {
+            $this->assertTrue(false);
+        }
+    }
+
+    /**
+     * Test destroy for a resource method.
+     *
+     * @return void
+     */
+    public function testDestroy()
+    {
+        if (is_null($this->created_id) == false) {
+            $response = $this->get_response("DELETE", "/api/{$this->api_route}/{$this->created_id}");
+            $response->assertStatus(204);
+        } else {
+            $this->assertTrue(false);
+        }
+    }
+
+}
