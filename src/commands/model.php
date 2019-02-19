@@ -8,7 +8,8 @@ class ModelCommand
         $arguments = array_slice($argv_arguments, 1);
         $script_line = implode($arguments, ' ');
 
-        shell_exec('php artisan make:model ' . $model . ' ' . $script_line . '--migration --controller --resource --api');
+        $dir = getcwd();
+        shell_exec("{$dir}/artisan make:model " . $model . ' ' . $script_line . '--migration --controller --resource --api');
 
         $model_regex = '/{{ MODEL }}/';
 

@@ -19,7 +19,7 @@ class LaravelPlusPlus
         'm' => ModelCommand,
         'model' => ModelCommand,
         'make_test' => ModelTestCommand,
-        'mt' => ModelTestCommand,
+        'mt' => MakeTestCommand,
     ];
 
     public $command_name_help_lookup = [
@@ -29,7 +29,7 @@ class LaravelPlusPlus
         'm' => ModelHelpCommand,
         'model' => ModelHelpCommand,
         'make_test' => ModelTestHelpCommand,
-        'mt' => ModelTestHelpCommand,
+        'mt' => MakeTestHelpCommand,
     ];
 
     public $descriptions = array(

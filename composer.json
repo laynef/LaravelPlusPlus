@@ -1,7 +1,7 @@
 {
     "name": "laravelpp/laravelpp",
     "type": "library",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "Scaffolding for all CRUD operators in Laravel",
     "keywords": [],
     "homepage": "https://github.com/laynef/LaravelPlusPlus",
