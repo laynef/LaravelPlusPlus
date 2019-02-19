@@ -87,9 +87,7 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     public function testStore()
     {
         $response = $this->get_response("POST", "/api/{$this->api_route}", [
-            "title" => "Test",
-            "text" => "Automatic",
-            "user_id" => 1
+
         ]);
 
         $json = json_decode($response->getContent(), true);
@@ -108,7 +106,9 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     public function testUpdate()
     {
         if (is_null($this->created_id) == false) {
-            $response = $this->get_response("PUT", "/api/{$this->api_route}/{$this->created_id}", []);
+            $response = $this->get_response("PUT", "/api/{$this->api_route}/{$this->created_id}", [
+                
+            ]);
             $response->assertStatus(200);
         } else {
             $this->assertTrue(false);
