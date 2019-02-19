@@ -10,7 +10,7 @@ class MakeTestCommand
         $route_capitalized_regex = '/{{ RESOURCE_ROUTE_CAPTIALIZE }}/';
         $route_captialized = ucfirst($resource_name);
 
-        $test_path = getcwd() . '/test/Feature/' . $route_captialized . 'Test.php';
+        $test_path = getcwd() . '/tests/Feature/' . $route_captialized . 'Test.php';
 
         $template_str = file_get_contents(__DIR__ . '/../templates/php_unit_test.txt');
 
