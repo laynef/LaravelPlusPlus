@@ -4,17 +4,17 @@ class ModelCommand
 {
 
     public function run($argv_arguments) {
-        $model = $this->camelCase($argv_arguments[1]);
-        $arguments = array_slice($argv_arguments, 2);
+        $model = $this->camelCase($argv_arguments[0]);
+        $arguments = array_slice($argv_arguments, 1);
         $script_line = implode($arguments, ' ');
 
         shell_exec('php artisan make:model ' . $model . ' ' . $script_line . '--migration --controller --resource --api');
 
         $model_regex = '/{{ MODEL }}/';
 
-        $controller_path = __DIR__ . '/app/Http/Controllers/' . $model . 'Controller.php';
+        $controller_path = getcwd() . '/app/Http/Controllers/' . $model . 'Controller.php';
 
-        $template_str = file_get_contents(__DIR__ . '/templates/controller.txt');
+        $template_str = file_get_contents(__DIR__ . '/../templates/controller.txt');
 
         $new_controller_string = preg_replace($model_regex, $model, $template_str);
         file_put_contents($controller_path, $new_controller_string);

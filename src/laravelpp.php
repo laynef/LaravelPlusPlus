@@ -32,6 +32,21 @@ class LaravelPlusPlus
         'mt' => ModelTestHelpCommand,
     ];
 
+    public $descriptions = array(
+        '- i => Initialize your project',
+        '- init => Initialize your project',
+        '- initialize => Initialize your project',
+        '- m => Generate your CRUD model, controller, and migration',
+        '- model => Generate your CRUD model, controller, and migration',
+        '- make_test => Generate your resource phpunit test',
+        '- mt => Generate your resource phpunit test'
+    );
+
+    public function json_version() {
+        $json = file_get_contents(__DIR__ . '/../composer.json');
+        $json_iterator = json_decode($json, true);
+        return $json_iterator['version'];
+    }
 
     public function run_command($arguments) {
         $is_help = sizeof(array_filter($arguments, function($val) {
@@ -42,16 +57,20 @@ class LaravelPlusPlus
         $help_lookup = $this->command_name_help_lookup;
         $command_lookup = $this->command_name_lookup;
 
-        $command_exists = $is_help && array_key_exists($command_name, $help_lookup) ? 
-            $help_lookup[$command_name] : array_key_exists($command_name, $command_lookup) ?
-            $command_lookup[$command_name] : false;
+        $lookup = $is_help ? $help_lookup : $command_lookup;
+
+        $command_exists = array_key_exists($command_name, $lookup) ? 
+            $lookup[$command_name] : false;
 
         if ($command_exists) {
             $command = new $command_exists();
             $command->run($passable_args);
         } else {
             $docs = new DocumentationHelpCommand();
-            $docs->run();
+            $string_array = $this->descriptions;
+            $description = implode("\n", $string_array);
+            $version = $this->json_version();
+            $docs->run($description, $version);
         }
         
     }

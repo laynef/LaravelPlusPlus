@@ -5,12 +5,12 @@ class MakeTestCommand
 
     public function run($argv_arguments) {
 
-        $resource_name = $argv_arguments[1];
+        $resource_name = $argv_arguments[0];
         $route_regex = '/{{ RESOURCE_ROUTE }}/';
         $route_capitalized_regex = '/{{ RESOURCE_ROUTE_CAPTIALIZE }}/';
         $route_captialized = ucfirst($resource_name);
 
-        $test_path = __DIR__ . '/test/Feature/' . $route_captialized . 'Test.php';
+        $test_path = getcwd() . '/test/Feature/' . $route_captialized . 'Test.php';
 
         $template_str = file_get_contents(__DIR__ . '/templates/php_unit_test.txt');
 
