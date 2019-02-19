@@ -19,8 +19,13 @@
     },
     "autoload": {
         "psr-0": {
-            "laravelpp": "lib"
+            "LaravelPlusPlus": "src"
         }
     },
-    "bin": ["bin/laravelpp"]
+    "bin": ["bin/laravelpp"],
+    "extra": {
+        "phar": {
+            "bundler": "composer"
+        }
+    }
 }
