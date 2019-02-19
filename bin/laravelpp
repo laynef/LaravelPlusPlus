@@ -1,7 +1,7 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 
 <?php
 
-require __DIR__ . '/../lib/laravelpp.php';
+require getcwd() . '/lib/laravelpp.php';
 $laravelpp = new LaravelPlusPlus();
 $laravelpp->run_command($argv);

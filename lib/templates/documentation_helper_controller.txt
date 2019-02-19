@@ -32,7 +32,7 @@ class DocumentationHelperController extends Controller
 
     public function generate_js_file() {
         $all_route = $this->get_route_array();
-        $public_path = __DIR__ . '/../../../public/js/docs.js';
+        $public_path = getcwd() . '/..public/js/docs.js';
 
         $file_str = '';
         foreach($all_route as &$route) {

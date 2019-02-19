@@ -6,16 +6,17 @@ class LaravelPlusPlus
         $is_help = sizeof(array_filter($arguments, function($val) {
             return $val == '--help' || $val == '-h';
         })) > 0;
-        $command_name = $arguments[0];
+        $command_name = $arguments[1];
         $directory_path = $is_help ? 'help' : 'commands';
-        $file_path = __DIR__ . "/{$directory_path}/{$command_name}.php";
+        $file_path = getcwd() . "/lib/{$directory_path}/{$command_name}.php";
+        $bash_path = getcwd() . "/lib/bash/run.sh";
 
         if (file_exists($file_path)) {
             $str_args = implode(' ', $arguments);
-            shell_exec("php {$file_path} {$str_args}");
+            shell_exec("{$bash_path} {$file_path} {$str_args}");
         } else {
-            $document_help = __DIR__ . '/help/documentation.php';
-            shell_exec("php {$document_help}");
+            $document_help = getcwd() . '/lib/bash/help/documentation.sh';
+            shell_exec("{$bash_path} {$document_help}");
         }
     }
 }
