@@ -18,14 +18,13 @@ Your command CLI command bin path is `./vendor/bin/laravelpp`
 
 ## Getting Started
 
-
 For existing project use Git and keep all the 
 changes from the initialize method while keeping your changes as well.
 
 Example:
 Create a new project and then initialize.
 
-```
+```bash
 laravel new (project-name)
 cd (project-name)
 composer require laravelpp/laravelpp
@@ -34,13 +33,17 @@ composer require laravelpp/laravelpp
 
 Run the initialize command to get started:
 
-`./vendor/bin/laravelpp init`
+```bash
+./vendor/bin/laravelpp init
+```
 
 Run the model command to generate a migration, model, and completed controller:
 
 This controller is overwritable when you declare the same method name in it's controller class.
 
-`./vendor/bin/laravelpp model (model-name)`
+```bash
+./vendor/bin/laravelpp model (model-name)
+```
 
 Update your migration and model file. Then declare your routes with `Route::apiResource`.
 The controller has all api resources completed by default. These will fail if your migration and
@@ -54,7 +57,9 @@ Steps to do after:
 
 Run the make_test command to make phpunit tests:
 
-`./vendor/bin/laravelpp make_test (resource-route-name)`
+```bash
+./vendor/bin/laravelpp make_test (resource-route-name)
+```
 
 After your tests are completed. Update your testStore and testUpdate methods.
 Add the keys available to your request body. If you have special headers like
@@ -65,7 +70,9 @@ Steps to do after:
 - Update request body based on the controller model's $fillable keys
 - Update your headers for all the requests
 
-`phpunit`
+```bash
+phpunit
+```
 
 ## API Documentation
 
@@ -103,7 +110,7 @@ These contain options like:
 
 - include=(associated model names comma separated)
 - where=(key:value rows comma separated and key value pairs are semi-colon separated)
-- order=(key DESC/ASC rows comma separated and key DESC/ASC pairs are one single space separated)
+- order=(key:(DESC||ASC) rows comma separated and key DESC/ASC pairs semi-colon separated)
 - limit=(amount returned the default is 25 plus count)
 - offset=(number_to_skip * limit option the default is 0)
 

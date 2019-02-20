@@ -1,6 +1,8 @@
 <?php
 
-class ModelCommand 
+require __DIR__ . '/../utils/strings.php';
+
+class ModelCommand extends Inflect
 {
 
     public function run($argv_arguments) {
@@ -13,7 +15,7 @@ class ModelCommand
         $model_regex = '/{{ MODEL }}/';
         $model_lc_regex = '/{{ MODEL_LC_PLURAL }}/';
 
-        $model_lc = str_plural($model);
+        $model_lc = $this->pluralize($model);
         $model_lc_plural = $this->snakeCase($model_lc);
 
         $controller_path = getcwd() . '/app/Http/Controllers/' . $model . 'Controller.php';
@@ -37,22 +39,6 @@ class ModelCommand
         file_put_contents($migration_path, $new_migration_string);
 
         echo "Your controller was generated.";
-    }
-
-    public function camelCase($str) {
-        $i = array("-","_");
-        $str = preg_replace('/([a-z])([A-Z])/', "\\1 \\2", $str);
-        $str = preg_replace('@[^a-zA-Z0-9\-_ ]+@', '', $str);
-        $str = str_replace($i, ' ', $str);
-        $str = str_replace(' ', '', ucwords(strtolower($str)));
-        $str = strtolower(substr($str,0,1)).substr($str,1);
-        return ucfirst($str);
-    }
-
-    public function snakeCase($str) {
-        $str[0] = strtolower($str[0]);
-        $func = create_function('$c', 'return "_" . strtolower($c[1]);');
-        return preg_replace_callback('/([A-Z])/', $func, $str);
     }
 
 }

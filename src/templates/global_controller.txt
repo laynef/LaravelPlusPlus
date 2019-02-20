@@ -173,7 +173,7 @@ class GlobalController extends Controller
         $qs_object = $request->query();
         $order = $qs_object["order"];
         return $this->array_flatmap(function($string) {
-            return explode(' ', $string);
+            return explode(':', $string);
         }, explode(',', $order));
     }
 

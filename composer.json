@@ -1,9 +1,21 @@
 {
     "name": "laravelpp/laravelpp",
     "type": "library",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "description": "Scaffolding for all CRUD operators in Laravel",
-    "keywords": [],
+    "keywords": [
+        "laravel",
+        "api",
+        "resources",
+        "crud",
+        "generate",
+        "generators",
+        "documentation",
+        "docs",
+        "phpunit",
+        "test",
+        "tests"
+    ],
     "homepage": "https://github.com/laynef/LaravelPlusPlus",
     "license": "MIT",
     "authors": [
