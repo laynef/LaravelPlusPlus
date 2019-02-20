@@ -21,7 +21,7 @@ class DocumentationController extends DocumentationHelperController
         $all_routes = [];
         foreach ($routes as &$route) {
             $method = $route->methods[0];
-            $url = '/' . ($route->uri == '/' ? '' : $route->uri);
+            $url = '/' . $route->uri;
 
             $action_array = $route->getActionName();
             $action_path = is_array($action_array) && sizeof($action_array) > 1 ? $action_array[1] : is_string($action_array) ? $action_array : null;

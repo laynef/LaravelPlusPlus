@@ -12,6 +12,9 @@ require __DIR__ . '/commands/model.php';
 class LaravelPlusPlus
 {
 
+    public $error_string = 'ERROR: Must make laravelpp commands in the laravel root directory';
+    public $not_found_string = 'ERROR: Your package cound not be found please reinstall';
+
     public $command_name_lookup = [
         'i' => InitializeCommand,
         'init' => InitializeCommand,

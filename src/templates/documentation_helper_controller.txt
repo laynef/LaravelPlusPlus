@@ -14,7 +14,7 @@ class DocumentationHelperController extends Controller
 
         foreach ($routes as &$route) {
             $method = $route->methods[0];
-            $url = '/' . ($route->uri == '/' ? '' : $route->uri);
+            $url = '/' . $route->uri;
 
             $temp_route = implode('', array_map(function($value) {
                 $is_param = sizeof(explode('{', $value)) > 1;

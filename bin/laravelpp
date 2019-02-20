@@ -12,4 +12,13 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 }
 
 $laravelpp = new LaravelPlusPlus();
-$laravelpp->run_command($argv);
+
+if (file_exists(getcwd() . '/artisan') == false) {
+    fwrite(STDERR, $laravelpp->error_string. PHP_EOL);
+    exit(1);
+} elseif ($laravelpp) {
+    $laravelpp->run_command($argv);
+} else {
+    fwrite(STDERR, $laravelpp->not_found_string. PHP_EOL);
+    exit(1);
+}
