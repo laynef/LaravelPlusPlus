@@ -1,3 +1,7 @@
 # Global Controller
 
-Coming soon.
+## Implementation
+
+## Default Features
+
+## Overwriting Default Features (For custom methods)
