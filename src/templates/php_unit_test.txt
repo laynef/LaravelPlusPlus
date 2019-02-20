@@ -32,14 +32,17 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     public function testIndex()
     {
         $response = $this->get_response("GET", "/api/{$this->api_route}");
-        $response->assertStatus(200);
+        $json = (array)json_decode($response->getContent(), true);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
     }
 
     public function testIndexInclude()
     {
         $include_options = false;
         if ($include_options) {
-            $this->get_response("GET", "/api/{$this->api_route}?include={$include_options}")->assertStatus(200);
+            $response = $this->get_response("GET", "/api/{$this->api_route}?include={$include_options}");
+            $json = (array)json_decode($response->getContent(), true);
+            $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
         } else {
             $this->assertTrue(true);
         }
@@ -48,25 +51,33 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     public function testIndexWhere()
     {
         $where_options = "id:2";
-        $this->get_response("GET", "/api/{$this->api_route}?where={$where_options}")->assertStatus(200);
+        $response = $this->get_response("GET", "/api/{$this->api_route}?where={$where_options}");
+        $json = (array)json_decode($response->getContent(), true);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
     }
 
     public function testIndexOrder()
     {
         $order_options = "id DESC";
-        $this->get_response("GET", "/api/{$this->api_route}?order={$order_options}")->assertStatus(200);
+        $response = $this->get_response("GET", "/api/{$this->api_route}?order={$order_options}");
+        $json = (array)json_decode($response->getContent(), true);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
     }
 
     public function testIndexLimit()
     {
         $limit_options = "1";
-        $this->get_response("GET", "/api/{$this->api_route}?limit={$limit_options}")->assertStatus(200);
+        $response = $this->get_response("GET", "/api/{$this->api_route}?limit={$limit_options}");
+        $json = (array)json_decode($response->getContent(), true);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
     }
 
     public function testIndexOffset()
     {
         $offset_options = "1";
-        $this->get_response("GET", "/api/{$this->api_route}?offset={$offset_options}")->assertStatus(200);
+        $response = $this->get_response("GET", "/api/{$this->api_route}?offset={$offset_options}");
+        $json = (array)json_decode($response->getContent(), true);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
     }
 
         /**
@@ -77,7 +88,7 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     public function testShow()
     {
         $response = $this->get_response("GET", "/api/{$this->api_route}/1");
-        $response->assertStatus(200);
+        $response->assertStatus(200)->assertJsonStructure(['id']);
     }
 
     /**
@@ -88,13 +99,12 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     public function testStore()
     {
         $response = $this->create();
-        $response->assertStatus(201);
+        $response->assertStatus(201)->assertJsonStructure(['id']);
     }
 
     public function create() {
         $response = $this->get_response("POST", "/api/{$this->api_route}", [
-            'title' => 'asdfasdf',
-            'text' => 'asdfasdfasdfasdf',
+            // TODO: Add request body from keys in $fillable
         ]);
         $json = json_decode($response->getContent(), true);
         if (array_key_exists('id', $json)) {
@@ -114,9 +124,9 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
         $this->create();
         if (is_null($this->created_id) == false) {
             $response = $this->get_response("PUT", "/api/{$this->api_route}/{$this->created_id}", [
-                'title' => 'asdfasdf',
+                // TODO: Add request body from keys in $fillable
             ]);
-            $response->assertStatus(200);
+            $response->assertStatus(200)->assertJsonStructure(['id']);
         } else {
             $this->assertTrue(false);
         }
