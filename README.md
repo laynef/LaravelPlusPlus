@@ -61,9 +61,10 @@ Run the make_test command to make phpunit tests:
 ./vendor/bin/laravelpp make_test (resource-route-name)
 ```
 
-After your tests are completed. Update your testStore and testUpdate methods.
-Add the keys available to your request body. If you have special headers like
-"Authorization" add those to the public variable $headers in that file.
+After your tests are completed. Update your update and create request bodies
+based on the model $fillable. Add the keys available to your request body.
+If you have special headers like "Authorization" add those to the public
+variable $headers in that file.
 
 Steps to do after:
 
@@ -119,6 +120,8 @@ For more information about the Global Controller check out the details here: [Gl
 ## Php Unit tests
 
 By default the tests check the format of the response and the status code.
+You must provide request params for your store method and update method based
+on the fillable option in your model. They are at the top of the file with TODOS.
 There are tests for the querystrings. That you can update. The include
 querystring test must be updated based on your schema. Replace `$include_options = false;`
 With `$include_options = '(string of associated model names comma separated)'`;
