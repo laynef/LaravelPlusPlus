@@ -4,6 +4,8 @@ Autogenerate your CRUD operations with Swagger like API documentation
 
 ## Requirements
 
+Laravel version >= 5.7
+
 ## Installation
 
 `composer require laravelpp/laravelpp`
