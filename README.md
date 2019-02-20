@@ -18,6 +18,20 @@ Your command CLI command bin path is `./vendor/bin/laravelpp`
 
 ## Getting Started
 
+
+For existing project use Git and keep all the 
+changes from the initialize method while keeping your changes as well.
+
+Example:
+Create a new project and then initialize.
+
+```
+laravel new (project-name)
+cd (project-name)
+composer require laravelpp/laravelpp
+./vendor/bin/laravelpp init
+```
+
 Run the initialize command to get started:
 
 `./vendor/bin/laravelpp init`
