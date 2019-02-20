@@ -1,0 +1,4 @@
+
+// Leave at the bottom of this file
+$docs = new DocumentationController();
+$docs->generate_docs_js_file();

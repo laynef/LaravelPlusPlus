@@ -7,12 +7,14 @@ class DocumentationHelperController extends Controller
 
     private function get_route_array() {
         $app = app();
-        $routes = $app->routes->getRoutes();
+        $routes = array_filter($app->routes->getRoutes(), function($val) {
+            return explode('/', $val->uri)[0] == 'api';
+        });
         $all_routes = [];
 
         foreach ($routes as &$route) {
             $method = $route->methods[0];
-            $url = '/' . $route->uri;
+            $url = '/' . ($route->uri == '/' ? '' : $route->uri);
 
             $temp_route = implode('', array_map(function($value) {
                 $is_param = sizeof(explode('{', $value)) > 1;
@@ -32,7 +34,7 @@ class DocumentationHelperController extends Controller
 
     public function generate_js_file() {
         $all_route = $this->get_route_array();
-        $public_path = getcwd() . '/..public/js/docs.js';
+        $public_path = base_path() . '/public/js/docs.js';
 
         $file_str = '';
         foreach($all_route as &$route) {

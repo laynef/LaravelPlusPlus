@@ -4,17 +4,15 @@ class ModelHelpCommand
 {
 
     public function run($argv_arguments) {
-echo "
-Same command as 'php artisan make:model <model-name>' 
-with the options '--migration --controller --resource --api' given
+echo "No Options available. 
 
-Get or other options from command;
-'php artisan make:model --help'
+Same command as:
+php artisan make:model <model-name> --migration --controller --resource
 
-php artisan make:model <model-name> <plus-your-options-as-instructed> --migration --controller --resource --api
+With your generated controller
 
 Run to generate your model, migration, and controller:
-'laravelpp m <model-name> [...additional-options]'
+'laravelpp model <model-name>'
 ";
     }
 }

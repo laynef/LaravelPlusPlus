@@ -9,12 +9,11 @@ class ModelCommand
         $script_line = implode($arguments, ' ');
 
         $dir = getcwd();
-        exec("/usr/bin/php artisan make:model " . $model . ' ' . $script_line . '--migration --controller --resource --api');
 
         $model_regex = '/{{ MODEL }}/';
         $model_lc_regex = '/{{ MODEL_LC_PLURAL }}/';
 
-        $model_lc = $this->pluralize($model);
+        $model_lc = str_plural($model);
         $model_lc_plural = $this->snakeCase($model_lc);
 
         $controller_path = getcwd() . '/app/Http/Controllers/' . $model . 'Controller.php';
@@ -55,17 +54,5 @@ class ModelCommand
         $func = create_function('$c', 'return "_" . strtolower($c[1]);');
         return preg_replace_callback('/([A-Z])/', $func, $str);
     }
-
-    public static function pluralize($string) {
-        $last_letter = strtolower($string[strlen($string)-1]);
-        switch($last_letter) {
-            case 'y':
-                return substr($string,0,-1).'ies';
-            case 's':
-                return $string.'es';
-            default:
-                return $string.'s';
-        }
-}
 
 }

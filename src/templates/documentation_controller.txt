@@ -14,12 +14,14 @@ class DocumentationController extends DocumentationHelperController
 
     public function index() {
         $app = app();
-        $routes = $app->routes->getRoutes();
+        $routes = array_filter($app->routes->getRoutes(), function($val) {
+            return explode('/', $val->uri)[0] == 'api';
+        });
 
         $all_routes = [];
         foreach ($routes as &$route) {
             $method = $route->methods[0];
-            $url = '/' . $route->uri;
+            $url = '/' . ($route->uri == '/' ? '' : $route->uri);
 
             $action_array = $route->getActionName();
             $action_path = is_array($action_array) && sizeof($action_array) > 1 ? $action_array[1] : is_string($action_array) ? $action_array : null;

@@ -17,7 +17,7 @@ class MakeTestCommand
         $new_test_string = preg_replace($route_regex, $resource_name, $template_str);
         $new_test_string = preg_replace($route_capitalized_regex, $route_captialized, $new_test_string);
         file_put_contents($test_path, $new_test_string);
-
+        
         echo "Your test was generated.";
     }
 

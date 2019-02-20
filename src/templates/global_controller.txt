@@ -108,7 +108,6 @@ class GlobalController extends Controller
         }
 
         if ($request->has('order')) {
-            // $data = $data->orderBy('id', 'DESC');
             $order_array = $this->handle_order($request);
             $data = $data->orderBy(...$order_array);
         }
