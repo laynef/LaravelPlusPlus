@@ -80,17 +80,6 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
         $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
     }
 
-        /**
-     * Test show for a resource method.
-     *
-     * @return void
-     */
-    public function testShow()
-    {
-        $response = $this->get_response("GET", "/api/{$this->api_route}/1");
-        $response->assertStatus(200)->assertJsonStructure(['id']);
-    }
-
     /**
      * Test store for a resource method.
      *
@@ -100,6 +89,17 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     {
         $response = $this->create();
         $response->assertStatus(201)->assertJsonStructure(['id']);
+    }
+
+    /**
+     * Test show for a resource method.
+     *
+     * @return void
+     */
+    public function testShow()
+    {
+        $response = $this->get_response("GET", "/api/{$this->api_route}/1");
+        $response->assertStatus(200)->assertJsonStructure(['id']);
     }
 
     public function create() {
