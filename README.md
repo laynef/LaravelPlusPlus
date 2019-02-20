@@ -130,7 +130,7 @@ Test cover:
 Index:
 
 - status_code = 200
-- json_format = { data: (array), count: (number) }
+- json_format = { data: (array), count: (integer) }
 
 Show:
 
