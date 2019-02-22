@@ -60,7 +60,7 @@ class DocumentationHelperController extends Controller
         var tempHeaderKey = null;
         for (var i = 0; i < headerList.length; i++) {
             var eleHeader = headerList[i].value;
-            if (i % 2 !== 0) {
+            if (i % 2 !== 0 && tempHeaderKey) {
                 headerObject[tempHeaderKey] = eleHeader;
                 tempHeaderKey = null;
             } else {
@@ -68,9 +68,8 @@ class DocumentationHelperController extends Controller
             }
         }
 
-        var csrfHeader = { headers: headerObject };
-        var jsonWebToken = document.getElementById('{$camelCased}AuthorizationToken');
-        if (jsonWebToken && jsonWebToken.value) csrfHeader.headers['Authorization'] = jsonWebToken.value;
+        var hasHeaders = Object.keys(headerObject).length > 0;
+        var headers = { headers: headerObject };
 
         var paramObject = {};
         var tempParamKey = null;
@@ -155,8 +154,11 @@ class DocumentationHelperController extends Controller
           }
         }
 
-        var args = allData.method === 'GET' || allData.method === 'DELETE' ? [routeName + querystring, csrfHeader] : [routeName + querystring, bodyObject, csrfHeader];
+        var args = allData.method === 'GET' ? [routeName + querystring, headers] : [routeName + querystring, bodyObject, headers];
+        if (!hasHeaders) args.pop();
         var resultElement = document.getElementById('{$camelCased}-results');
+
+        console.log(args)
 
         axios[allData.method.toLowerCase()](...args)
           .then((resp) => {

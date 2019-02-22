@@ -35,7 +35,7 @@
                             <span>{{ $route['route'] }}</span>
                         </div>
                         <div class="card-body p-2 w-100" style="max-height: 550px; overflow: auto;">
-                            @if ($route['middleware'])
+                            <!-- @if ($route['middleware'])
                                 <h2 class="h5">Middleware Used:</h2>
                                 <ul>
                                     @foreach ($route['middleware'] as $ware)
@@ -50,7 +50,7 @@
                                         <li class="h6">{{ $ware }}</li>
                                     @endforeach
                                 </ul>
-                            </h2>
+                            </h2> -->
 
                             <div class="d-flex f-row w-100">
                                 <h2 class="w-100 h6">Headers:</h2>
