@@ -85,7 +85,7 @@ class DocumentationHelperController extends Controller
 
         var routeName = allData.route.split('/').map(e => paramObject[e] ? paramObject[e] : e).join('/');
 
-        if (allData.method !== 'GET' || allData.method !== 'DELETE') {
+        if (allData.method !== 'GET') {
         var bodyDataType = document.getElementById('{$camelCased}DataType') && document.getElementById('{$camelCased}DataType').value ? document.getElementById('{$camelCased}DataType').value : false;
         var formBoolean = bodyDataType === 'Form Data';
 
@@ -157,8 +157,6 @@ class DocumentationHelperController extends Controller
         var args = allData.method === 'GET' ? [routeName + querystring, headers] : [routeName + querystring, bodyObject, headers];
         if (!hasHeaders) args.pop();
         var resultElement = document.getElementById('{$camelCased}-results');
-
-        console.log(args)
 
         axios[allData.method.toLowerCase()](...args)
           .then((resp) => {
