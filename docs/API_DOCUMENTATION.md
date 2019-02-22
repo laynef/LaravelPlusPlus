@@ -15,6 +15,3 @@ $docs->generate_js_file();
 ```
 
 Use this function at the bottom of your route file in `routes/api.php`.
-
-## Maintenance
-
