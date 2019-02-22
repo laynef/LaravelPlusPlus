@@ -53,9 +53,22 @@ class DocumentationHelperController extends Controller
           method: '{$route['method']}',
           route: '{$route['route']}',
         };
+        var headerList = document.getElementById('{$camelCased}HeadersForm') && document.getElementById('{$camelCased}HeadersForm').elements ? document.getElementById('{$camelCased}HeadersForm').elements : [];
         var paramList = document.getElementById('{$camelCased}ParamsForm') && document.getElementById('{$camelCased}ParamsForm').elements ? document.getElementById('{$camelCased}ParamsForm').elements : [];
 
-        var csrfHeader = { headers: { 'X-XSRF-TOKEN': null } };
+        var headerObject = {};
+        var tempHeaderKey = null;
+        for (var i = 0; i < headerList.length; i++) {
+            var eleHeader = headerList[i].value;
+            if (i % 2 !== 0) {
+                headerObject[tempHeaderKey] = eleHeader;
+                tempHeaderKey = null;
+            } else {
+                tempHeaderKey = eleHeader;
+            }
+        }
+
+        var csrfHeader = { headers: headerObject };
         var jsonWebToken = document.getElementById('{$camelCased}AuthorizationToken');
         if (jsonWebToken && jsonWebToken.value) csrfHeader.headers['Authorization'] = jsonWebToken.value;
 
@@ -178,6 +191,12 @@ class DocumentationHelperController extends Controller
           var ele = document.getElementById('{$camelCased}QSForm');
           ele.innerHTML += '<div class=\"d-flex f-row\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter key\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter value\"></div>';
         };
+        ";
+
+            $javascriptString .= "window.{$camelCased}NewHeader = function() {
+            var ele = document.getElementById('{$camelCased}HeadersForm');
+            ele.innerHTML += '<div class=\"d-flex f-row\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter key\"><input class=\"w-100 m-1 form-control\" type=\"text\" placeholder=\"Enter value\"></div>';
+          };
         ";
 
         return $javascriptString;

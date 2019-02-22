@@ -51,11 +51,18 @@
                                     @endforeach
                                 </ul>
                             </h2>
+
                             <div class="d-flex f-row w-100">
-                                <h2 class="w-100 h6">Authorization Header</h2>
+                                <h2 class="w-100 h6">Headers:</h2>
+                                <button class="{{ $route['submitButtonColor'] }} rounded-circle" onclick="{{ $route['camelCased'] }}NewHeader()">+</button>
                             </div>
                             <div class="d-flex f-row w-100">
-                                <input id="{{ $route['camelCased'] }}AuthorizationToken" type="text" class="w-100 m-1 form-control" placeholder="Enter token">
+                                <form id="{{ $route['camelCased'] }}HeadersForm"" class="w-100">
+                                        <div class="d-flex f-row">
+                                            <input type="text" class="w-100 m-1 d-flex f-row form-control" placeholder="Enter key">
+                                            <input  type="text" class="w-100 m-1 form-control" placeholder="Enter value">
+                                        </div>
+                                </form>
                             </div>
 
                             @if ($route['allowParams'])
