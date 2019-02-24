@@ -108,7 +108,7 @@ class GlobalController extends Controller
             $data = $data->orderBy(...$order_array);
         }
 
-        return $$data->skip($qs["offset"])->paginate($qs["limit"]);
+        return $data->skip($qs["offset"])->paginate($qs["limit"]);
     }
 
     private function handle_pagination($request) {
