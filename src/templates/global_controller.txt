@@ -90,7 +90,6 @@ class GlobalController extends Controller
     private function handle_index($model_class, $request) {
         $qs = $this->handle_pagination($request);
         $data = $model_class;
-        $count = $model_class;
 
         if ($request->has('include')) {
             $array = $this->handle_include($request);
@@ -102,9 +101,6 @@ class GlobalController extends Controller
         if ($request->has('where')) {
             $array = $this->handle_where($request);
             $data = $data->where($array);
-            $count = $count->where($array);
-        } else {
-            $count = $count->all();
         }
 
         if ($request->has('order')) {
@@ -112,22 +108,14 @@ class GlobalController extends Controller
             $data = $data->orderBy(...$order_array);
         }
 
-        $data = $data->skip($qs["offset"])->take($qs["limit"]);
-
-        $data = $data->get();
-        $count = $count->count();
-
-        return [
-            'data' => $data,
-            'count' => $count,
-        ];
+        return $$data->skip($qs["offset"])->paginate($qs["limit"]);
     }
 
     private function handle_pagination($request) {
         $qs_object = $request->query();
 
         $limit = $request->has('limit') ? (int)$qs_object["limit"] : 25;
-        $offset = $request->has('offset')  ? (int)$qs_object["offset"] * $limit : 0;
+        $offset = $request->has('offset') ? (int)$qs_object["offset"] : 0;
 
         return [
             'offset' => $offset,
