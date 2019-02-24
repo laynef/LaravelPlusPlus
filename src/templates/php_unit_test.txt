@@ -44,7 +44,7 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
     public function testIndex()
     {
         $response = $this->get_response("GET", "/api/{$this->api_route}");
-        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'total']);
     }
 
     public function testIndexInclude()
@@ -52,7 +52,18 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
         $include_options = false;
         if ($include_options) {
             $response = $this->get_response("GET", "/api/{$this->api_route}?include={$include_options}");
-            $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
+            $response->assertStatus(200)->assertJsonStructure(['data', 'total']);
+        } else {
+            $this->assertTrue(true);
+        }
+    }
+
+    public function testIndexPage()
+    {
+        $page_options = 1;
+        if ($page_options) {
+            $response = $this->get_response("GET", "/api/{$this->api_route}?page={$page_options}");
+            $response->assertStatus(200)->assertJsonStructure(['data', 'total']);
         } else {
             $this->assertTrue(true);
         }
@@ -63,28 +74,28 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
         $this->create();
         $where_options = "id:{$this->created_id}";
         $response = $this->get_response("GET", "/api/{$this->api_route}?where={$where_options}");
-        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'total']);
     }
 
     public function testIndexOrder()
     {
         $order_options = "id:DESC";
         $response = $this->get_response("GET", "/api/{$this->api_route}?order={$order_options}");
-        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'total']);
     }
 
     public function testIndexLimit()
     {
         $limit_options = "1";
         $response = $this->get_response("GET", "/api/{$this->api_route}?limit={$limit_options}");
-        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'total']);
     }
 
     public function testIndexOffset()
     {
         $offset_options = "1";
         $response = $this->get_response("GET", "/api/{$this->api_route}?offset={$offset_options}");
-        $response->assertStatus(200)->assertJsonStructure(['data', 'count']);
+        $response->assertStatus(200)->assertJsonStructure(['data', 'total']);
     }
 
     /**

@@ -14,14 +14,14 @@ All resource methods are made by default.
 
 ### Index Method
 
-Index get default will return a limit of 25 and offset of 0.
+Index get default will return a limit of 25 and offset of 0 and page of 1.
 Index uses offset to create pages.
 
 Pagination:
 
 ```plain-text
-First page = ?offset=0&limit=25
-Second page = ?offset=1&limit=25
+First page = ?page=1&limit=25&offset=0
+Second page = ?page=2&limit=25&offset=0
 Etc...
 ```
 
