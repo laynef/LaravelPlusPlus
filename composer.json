@@ -1,7 +1,7 @@
 {
     "name": "laravelpp/laravelpp",
     "type": "library",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Scaffolding for all CRUD operators in Laravel",
     "keywords": [
         "laravel",
