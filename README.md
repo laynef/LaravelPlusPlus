@@ -112,8 +112,9 @@ These contain options like:
 - include=(associated model names comma separated)
 - where=(key:value rows comma separated and key value pairs are semi-colon separated)
 - order=(key:(DESC||ASC) rows comma separated and key DESC/ASC pairs semi-colon separated)
-- limit=(amount returned the default is 25 plus count)
-- offset=(number_to_skip * limit option the default is 0)
+- limit=(amount returned the default is 25)
+- offset=(number of rows to skip the default is 0)
+- page=(which page to return the default is 1)
 
 For more information about the Global Controller check out the details here: [Global Controller Docs](./docs/GLOBAL_CONTROLLER.md)
 
