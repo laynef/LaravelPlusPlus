@@ -51,10 +51,20 @@ class GlobalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         $class = $this->model();
-        $show = $class->find($id);
+        $show = $class;
+
+        if ($request->has('include')) {
+            $array = $this->handle_include($request);
+            foreach($array as &$association) {
+                $show = $show->with($association);
+            }
+        }
+
+        $show = $show->find($id);
+
         return response()->json($show, 200);
     }
 

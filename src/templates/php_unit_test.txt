@@ -110,6 +110,18 @@ class {{ RESOURCE_ROUTE_CAPTIALIZE }}ApiTest extends TestCase
         $response->assertStatus(200)->assertJsonStructure(['id']);
     }
 
+    public function testShowInclude()
+    {
+        $include_options = false;
+        if ($include_options) {
+            $this->create();
+            $response = $this->get_response("GET", "/api/{$this->api_route}/{$this->created_id}?include={$include_options}");
+            $response->assertStatus(200)->assertJsonStructure(['id']);
+        } else {
+            $this->assertTrue(true);
+        }
+    }
+
     /**
      * Test update for a resource method.
      *
