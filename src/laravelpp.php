@@ -4,9 +4,11 @@ require __DIR__ . '/help/documentation.php';
 require __DIR__ . '/help/initialize.php';
 require __DIR__ . '/help/make_test.php';
 require __DIR__ . '/help/model.php';
+require __DIR__ . '/help/update_version.php';
 require __DIR__ . '/commands/initialize.php';
 require __DIR__ . '/commands/make_test.php';
 require __DIR__ . '/commands/model.php';
+require __DIR__ . '/commands/update_version.php';
 
 
 class LaravelPlusPlus
@@ -21,8 +23,10 @@ class LaravelPlusPlus
         'initialize' => InitializeCommand,
         'm' => ModelCommand,
         'model' => ModelCommand,
-        'make_test' => ModelTestCommand,
         'mt' => MakeTestCommand,
+        'make_test' => ModelTestCommand,
+        'uv' => UpdateVersionCommand,
+        'update_version' => UpdateVersionCommand,
     ];
 
     public $command_name_help_lookup = [
@@ -31,8 +35,10 @@ class LaravelPlusPlus
         'initialize' => InitializeHelpCommand,
         'm' => ModelHelpCommand,
         'model' => ModelHelpCommand,
-        'make_test' => ModelTestHelpCommand,
         'mt' => MakeTestHelpCommand,
+        'make_test' => ModelTestHelpCommand,
+        'uv' => UpdateVersionHelpCommand,
+        'update_version' => UpdateVersionHelpCommand,
     ];
 
     public $descriptions = array(
@@ -41,8 +47,10 @@ class LaravelPlusPlus
         '- initialize => Initialize your project',
         '- m => Generate your CRUD model, controller, and migration',
         '- model => Generate your CRUD model, controller, and migration',
+        '- mt => Generate your resource phpunit test',
         '- make_test => Generate your resource phpunit test',
-        '- mt => Generate your resource phpunit test'
+        '- uv => Update your code base with the latest version',
+        '- update_version => Update your code base with the latest version',
     );
 
     public function json_version() {

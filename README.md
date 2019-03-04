@@ -10,6 +10,13 @@ Laravel version >= 5.7
 
 `composer require laravelpp/laravelpp`
 
+## Update to the Latest Version
+
+```bash
+composer update laravelpp/laravelpp
+./vendor/bin/laravelpp update_version
+```
+
 ## CLI Commands
 
 Your command CLI command bin path is `./vendor/bin/laravelpp`
