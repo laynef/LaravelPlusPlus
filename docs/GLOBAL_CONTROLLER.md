@@ -15,13 +15,20 @@ All resource methods are made by default.
 ### Index Method
 
 Index get default will return a limit of 25 and offset of 0 and page of 1.
-Index uses offset to create pages.
+
+You can overwrite the limit (amount per page) in your inherited controller with:
+
+```php
+    public $default_per_page = 50;
+```
+
+Querystring options
 
 Pagination:
 
 ```plain-text
-First page = ?page=1&limit=25&offset=0
-Second page = ?page=2&limit=25&offset=0
+First page = ?page=1&limit=25&offset=0 (This is set by default)
+Second page = ?page=2 (limit is 25 and offset is 0 by default)
 Etc...
 ```
 
@@ -53,6 +60,17 @@ comma separated. The value can only be `DESC` or `ASC`.
 ```
 
 ## Show Method
+
+Querystring options
+
+Associations:
+
+You can grab the associated tables with include with comma separation.
+They will be formatted in the Global Controller. Provide a lowercase singluar model name.
+
+```plain-text
+?include=(1st-model-name),(2nd-model-name)
+```
 
 Returns the row by id of a model in a single object returned.
 

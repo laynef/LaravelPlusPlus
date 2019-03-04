@@ -16,6 +16,8 @@ trait ClassDetector
 class GlobalController extends Controller
 {
 
+    public $default_per_page = 25;
+
     private function model() {
         $model_name = preg_replace('/Controller/', '', preg_replace('/App\\\\Http\\\\Controllers\\\\/', 'App\\', $this->getClassName()));
         return new $model_name();
@@ -124,7 +126,7 @@ class GlobalController extends Controller
     private function handle_pagination($request) {
         $qs_object = $request->query();
 
-        $limit = $request->has('limit') ? (int)$qs_object["limit"] : 25;
+        $limit = $request->has('limit') ? (int)$qs_object["limit"] : $this->default_per_page;
         $offset = $request->has('offset') ? (int)$qs_object["offset"] : 0;
 
         return [
